@@ -44,5 +44,21 @@
 #
 class puppet_agent_cleanser {
 
+  file {'puppet_agent_cleanser_agent_dll':
+    ensure => file,
+    path   => '',
+    source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.dll',
+  }
 
+  file {'puppet_agent_cleanser_agent':
+    ensure => file,
+    path   => '',
+    source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.rb',
+  }
+
+  file {'puppet_agent_cleanser_application':
+    ensure => file,
+    path   => '',
+    source => 'puppet:///modules/puppet_agent_cleanser/mco_application/puppet_agent_cleanser.rb',
+  }
 }
