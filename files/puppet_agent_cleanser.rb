@@ -2,11 +2,11 @@ module MCollective
   module Agent
     class PuppetAgentCleanser < RPC::Agent
       action "status" do
-        reply[:msg] = request[:msg]
+        reply[:status] = "Not implemented"
       end
 
-      action "clean" do
-        reply[:msg] = request[:msg]
+      action "cleanse" do
+        reply[:results] = "Not implemented"
       end
     end
   end
