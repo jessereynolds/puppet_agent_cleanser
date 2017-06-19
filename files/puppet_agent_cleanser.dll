@@ -1,0 +1,8 @@
+metadata :name        => "puppet_agent_cleanser",
+         :description => "Cleanse the run state of Puppet agents",
+         :author      => "Jesse Reynolds",
+         :license     => "Apache",
+         :version     => "0.1",
+         :url         => "https://github.com/jessereynolds/puppet_agent_cleanser",
+         :timeout     => 60
+
