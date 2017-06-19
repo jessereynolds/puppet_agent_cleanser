@@ -1,0 +1,15 @@
+{
+  "name": "jesse/puppet_agent_cleanser",
+  "version": "0.1.0",
+  "author": "Jesse Reynolds",
+  "summary": "Use MCollective to clean the state of your Puppet agents",
+  "license": "Apache-2.0",
+  "source": "https://github.com/jessereynolds/puppet_agent_cleanser",
+  "project_page": "https://github.com/jessereynolds/puppet_agent_cleanser",
+  "issues_url": "https://github.com/jessereynolds/puppet_agent_cleanser/issues",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
