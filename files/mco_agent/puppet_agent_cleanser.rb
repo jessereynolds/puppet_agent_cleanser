@@ -52,16 +52,14 @@ module MCollective
       end
 
       def cleanse
-        # if agent catalog run lockfile exists and age > max_age
         #   if agent service running
         #     stop agent
         #   if any puppet agent processes still running
         #     kill them
-        #   if lockfile still exists
+        #   if lockfile exists
         #     rm it
         #   start agent
         age = has_stale_lockfile
-        return false unless age
 
         cmd = '/opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped'
         out = ""
@@ -73,12 +71,12 @@ module MCollective
 
         if agent_processes.length > 0
           kill_agent_processes
-          sleep 5
+          sleep 10
         end
 
         if agent_processes.length > 0
           kill_agent_processes('SIGKILL')
-          sleep 5
+          sleep 10
         end
 
         if agent_processes.length > 0
