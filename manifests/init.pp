@@ -1,64 +1,99 @@
 # Class: puppet_agent_cleanser
 # ===========================
 #
-# Full description of class puppet_agent_cleanser here.
+# Installs mgo agent and application for cleansing puppet agent run states
 #
 # Parameters
 # ----------
 #
-# Document parameters here.
-#
-# * `sample parameter`
-# Explanation of what this parameter affects and what it defaults to.
-# e.g. "Specify one or more upstream ntp servers as an array."
-#
-# Variables
-# ----------
-#
-# Here you should define a list of variables that this module would require.
-#
-# * `sample variable`
-#  Explanation of how this variable affects the function of this class and if
-#  it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#  External Node Classifier as a comma separated list of hostnames." (Note,
-#  global variables should be avoided in favor of class parameters as
-#  of Puppet 2.6.)
+# * `include_app`
+# Whether to install the mco app. Default: true
+
+# * `include_agent`
+# Whether to install the mco agent. Default: true
 #
 # Examples
 # --------
 #
 # @example
 #    class { 'puppet_agent_cleanser':
-#      servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#      include_app => true,
 #    }
 #
 # Authors
 # -------
 #
-# Author Name <author@domain.com>
+# Jesse Reynolds <jesse.reynolds@puppet.com>
 #
 # Copyright
 # ---------
 #
-# Copyright 2017 Your name here, unless otherwise noted.
+# Copyright 2017 Jesse Reynolds
 #
-class puppet_agent_cleanser {
+class puppet_agent_cleanser (
+  Boolean $include_app   = true,
+  Boolean $include_agent = true,
+) {
+
+  if versioncmp($::puppetversion, '4.0.0') < 0 {
+    fail("This module is targeted at Puppet 4 and above, not Puppet ${::puppetversion}")
+  }
+
+  $mco_svc = 'mcollective'
+  $ensure_agent = $include_agent ? {
+    true    => 'file',
+    default => 'absent',
+  }
+
+  $ensure_app = $include_app ? {
+    true    => 'file',
+    default => 'absent',
+  }
+
+  $ensure_dll = ($include_app or $include_agent) ? {
+    true    => 'file',
+    default => 'absent',
+  }
+
+  case $facts['kernel'] {
+    'Windows': {
+      $mco_dir = 'C:/ProgramData/puppetlabs/mcollective/plugins/mcollective'
+      File {
+        owner  => 'S-1-5-32-544', # Adminstrator
+        group  => 'S-1-5-32-544', # Adminstrators
+        mode   => '0664',         # Both user and group need write permission
+      }
+    }
+    'Linux', 'SunOS': {
+      $mco_dir = '/opt/puppetlabs/mcollective/plugins/mcollective'
+      File {
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0644',
+      }
+    }
+    default: {
+      fail("Unsupported OS: ${facts['kernel']}")
+    }
+  }
 
   file {'puppet_agent_cleanser_agent_dll':
-    ensure => file,
-    path   => '',
+    ensure => $ensure_dll,
+    path   => "${mco_dir}/agent/puppet_agent_cleanser.dll",
     source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.dll',
+    notify => Service[$mco_svc],
   }
 
   file {'puppet_agent_cleanser_agent':
-    ensure => file,
-    path   => '',
+    ensure => $ensure_agent,
+    path   => "${mco_dir}/agent/puppet_agent_cleanser.rb",
     source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.rb',
+    notify => Service[$mco_svc],
   }
 
   file {'puppet_agent_cleanser_application':
-    ensure => file,
-    path   => '',
+    ensure => $ensure_app,
+    path   => "${mco_dir}/application/puppet_agent_cleanser.rb",
     source => 'puppet:///modules/puppet_agent_cleanser/mco_application/puppet_agent_cleanser.rb',
   }
 }
