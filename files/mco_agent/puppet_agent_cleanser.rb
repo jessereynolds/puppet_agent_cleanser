@@ -28,7 +28,7 @@ module MCollective
         out = ""
         err = ""
         code = run(cmd, :stdout => out, :stderr => err)
-        unless code == 0
+        unless [0, 1].include?(code)
           raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
         pgrep = out.chomp.split
@@ -39,7 +39,7 @@ module MCollective
         out = ""
         err = ""
         code = run(cmd, :stdout => out, :stderr => err)
-        unless code == 0
+        unless [0, 1].include?(code)
           raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
         pkill = out.chomp.split
