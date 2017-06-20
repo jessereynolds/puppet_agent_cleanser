@@ -50,7 +50,7 @@ class puppet_agent_cleanser (
     default => 'absent',
   }
 
-  $ensure_dll = ($include_app or $include_agent) ? {
+  $ensure_ddl = ($include_app or $include_agent) ? {
     true    => 'file',
     default => 'absent',
   }
@@ -77,10 +77,10 @@ class puppet_agent_cleanser (
     }
   }
 
-  file {'puppet_agent_cleanser_agent_dll':
-    ensure => $ensure_dll,
-    path   => "${mco_dir}/agent/puppet_agent_cleanser.dll",
-    source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.dll',
+  file {'puppet_agent_cleanser_agent_ddl':
+    ensure => $ensure_ddl,
+    path   => "${mco_dir}/agent/puppet_agent_cleanser.ddl",
+    source => 'puppet:///modules/puppet_agent_cleanser/mco_agent/puppet_agent_cleanser.ddl',
     notify => Service[$mco_svc],
   }
 
