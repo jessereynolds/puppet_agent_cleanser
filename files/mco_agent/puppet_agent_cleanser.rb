@@ -31,7 +31,7 @@ module MCollective
         unless code == 0
           raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
-        pgrep = result[:out].chomp.split
+        pgrep = out.chomp.split
       end
 
       def kill_agent_processes(signal)
