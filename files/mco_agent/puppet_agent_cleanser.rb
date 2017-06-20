@@ -6,11 +6,13 @@ module MCollective
 
       def agent_catalog_run_lockfile
         cmd = '/opt/puppetlabs/puppet/bin/puppet apply --configprint agent_catalog_run_lockfile'
-        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless result[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
+        out = ""
+        err = ""
+        code = run(cmd, :stdout => out, :stderr => err)
+        unless code == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
-        result[:out]
+        out.chomp
       end
 
       def has_stale_lockfile
@@ -23,9 +25,11 @@ module MCollective
 
       def agent_processes
         cmd = '/usr/bin/pgrep -fl "puppet agent"'
-        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless result[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
+        out = ""
+        err = ""
+        code = run(cmd, :stdout => out, :stderr => err)
+        unless code == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
         pgrep = result[:out].chomp.split
       end
@@ -33,11 +37,13 @@ module MCollective
       def kill_agent_processes(signal)
         signal = 'SIGTERM' unless signal
         cmd = "/usr/bin/pkill -#{signal} -f 'puppet agent'"
-        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless result[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
+        out = ""
+        err = ""
+        code = run(cmd, :stdout => out, :stderr => err)
+        unless code == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
-        pkill = result[:out].chomp.split
+        pkill = out.chomp.split
       end
 
       def status
@@ -58,9 +64,11 @@ module MCollective
         return false unless age
 
         cmd = '/opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped'
-        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless result[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
+        out = ""
+        err = ""
+        code = run(cmd, :stdout => out, :stderr => err)
+        unless code == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
 
         if agent_processes.length > 0
@@ -83,9 +91,11 @@ module MCollective
         end
 
         cmd = '/opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=running'
-        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless result[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
+        out = ""
+        err = ""
+        code = run(cmd, :stdout => out, :stderr => err)
+        unless code == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
 
         "success"
