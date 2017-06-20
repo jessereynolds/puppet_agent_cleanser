@@ -17,8 +17,8 @@ By default, including the `puppet_agent_cleanser` class will install both the MC
 
 ```puppet
 class { 'puppet_agent_cleanser':
-  enable_app   => false,
-  enable_agent => true,
+  include_app   => false,
+  include_agent => true,
 }
 ```
 

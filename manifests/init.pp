@@ -1,5 +1,5 @@
 # Class: puppet_agent_cleanser
-# ===========================
+# ============================
 #
 # Installs mgo agent and application for cleansing puppet agent run states
 #
