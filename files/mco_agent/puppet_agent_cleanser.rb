@@ -5,7 +5,7 @@ module MCollective
       MAX_AGE = 3600
 
       def agent_catalog_run_lockfile
-        cmd = 'puppet agent --configprint agent_catalog_run_lockfile'
+        cmd = '/opt/puppetlabs/puppet/bin/puppet apply --configprint agent_catalog_run_lockfile'
         reply[:status] = run(cmd, :stdout => :out, :stderr => :err)
         unless reply[:status] == 0
           raise "Error when running cmd: [#{cmd}], status: [#{reply[:status]}], stderr: [#{reply[:err]}], stdout: [#{reply[:out]}]"
@@ -57,7 +57,7 @@ module MCollective
         age = has_stale_lockfile
         return false unless age
 
-        cmd = 'puppet service puppet ensure=stopped'
+        cmd = '/opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=stopped'
         result[:status] = run(cmd, :stdout => :out, :stderr => :err)
         unless result[:status] == 0
           raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
@@ -82,7 +82,7 @@ module MCollective
           File.delete(lockfile)
         end
 
-        cmd = 'puppet service puppet ensure=running'
+        cmd = '/opt/puppetlabs/puppet/bin/puppet resource service puppet ensure=running'
         result[:status] = run(cmd, :stdout => :out, :stderr => :err)
         unless result[:status] == 0
           raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
@@ -96,7 +96,7 @@ module MCollective
       end
 
       action "cleanse" do
-        reply[:results] = "Not implemented"
+        reply[:results] = cleanse
       end
     end
   end
