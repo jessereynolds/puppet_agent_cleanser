@@ -46,8 +46,13 @@ module MCollective
       end
 
       def status
-        age = has_stale_lockfile
-        return age
+        output = ""
+        if has_stale_lockfile
+          output += "Stale lockfile found. "
+        end
+        num_procs = agent_processes.length
+        output += "#{num_procs} process."
+        output
       end
 
       def cleanse
