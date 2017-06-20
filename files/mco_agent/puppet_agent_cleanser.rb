@@ -31,7 +31,7 @@ module MCollective
         unless [0, 1].include?(code)
           raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
-        pgrep = out.chomp.split
+        pgrep = out.chomp.lines
       end
 
       def kill_agent_processes(signal = 'SIGTERM')
@@ -42,7 +42,6 @@ module MCollective
         unless [0, 1].include?(code)
           raise "Error when running cmd: [#{cmd}], status: [#{code}], stderr: [#{err}], stdout: [#{out}]"
         end
-        pkill = out.chomp.split
       end
 
       def status
