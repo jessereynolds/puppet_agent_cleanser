@@ -34,8 +34,7 @@ module MCollective
         pgrep = out.chomp.split
       end
 
-      def kill_agent_processes(signal)
-        signal = 'SIGTERM' unless signal
+      def kill_agent_processes(signal = 'SIGTERM')
         cmd = "/usr/bin/pkill -#{signal} -f 'puppet agent'"
         out = ""
         err = ""
