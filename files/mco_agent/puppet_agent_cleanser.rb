@@ -6,18 +6,18 @@ module MCollective
 
       def agent_catalog_run_lockfile
         cmd = '/opt/puppetlabs/puppet/bin/puppet apply --configprint agent_catalog_run_lockfile'
-        reply[:status] = run(cmd, :stdout => :out, :stderr => :err)
-        unless reply[:status] == 0
-          raise "Error when running cmd: [#{cmd}], status: [#{reply[:status]}], stderr: [#{reply[:err]}], stdout: [#{reply[:out]}]"
+        result[:status] = run(cmd, :stdout => :out, :stderr => :err)
+        unless result[:status] == 0
+          raise "Error when running cmd: [#{cmd}], status: [#{result[:status]}], stderr: [#{result[:err]}], stdout: [#{result[:out]}]"
         end
-        reply[:out]
+        result[:out]
       end
 
       def has_stale_lockfile
         lockfile = agent_catalog_run_lockfile
         return false unless File.exist?(lockfile)
         age = Time.now - File.mtime(lockfile)
-        return false if age > MAX_AGE
+        return false if age < MAX_AGE
         return age
       end
 
