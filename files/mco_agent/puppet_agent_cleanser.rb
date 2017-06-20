@@ -1,6 +1,6 @@
 module MCollective
   module Agent
-    class PuppetAgentCleanser < RPC::Agent
+    class Puppet_agent_cleanser < RPC::Agent
       action "status" do
         reply[:status] = "Not implemented"
       end
