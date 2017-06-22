@@ -44,6 +44,11 @@ foo.example
 Finished processing 1 / 1 hosts in 1087.47 ms
 ```
 
+The status command reports on:
+
+  - the number of puppet agent processes running (if's 2 for more than the expected duration of a puppet agent run then it's a good indication that the child agent process is probably stuck)
+  - if there is a lock file that is older than 1 hr this is also noted
+
 We can now target this machine to have its Puppet agent cleanly restarted (including killing of any stuck child processes and deletion of the agent catalog run lockfile) by running `mco puppet_agent_cleanser cleanse`
 
 Eg:
@@ -64,10 +69,6 @@ Finished processing 1 / 1 hosts in 19230.85 ms
 
 The logic that cleanse uses is as follows:
 
-- status - reports on
-  - the number of puppet agent processes running (if's 2 for more than the expected duration of a puppet agent run then it's a good indication that the child agent process is probably stuck)
-  - if there is a lock file that is older than 1 hr this is also noted
-- cleanse - does the following:
   - stop agent service
   - if any puppet agent processes are still running
     - try to politely kill them with SIGTERM
