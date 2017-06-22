@@ -62,6 +62,25 @@ foo.example
 Finished processing 1 / 1 hosts in 19230.85 ms
 ```
 
+The logic that cleanse uses is as follows:
+
+- status - reports on
+  - the number of puppet agent processes running (if's 2 for more than the expected duration of a puppet agent run then it's a good indication that the child agent process is probably stuck)
+  - if there is a lock file that is older than 1 hr this is also noted
+- cleanse - does the following:
+  - stop agent service
+  - if any puppet agent processes are still running
+    - try to politely kill them with SIGTERM
+    - sleep 10 seconds
+  - if any puppet agent processes are still running
+    - kill them rudely with SIGKILL
+    - sleep 10 seconds
+  - if any puppet agent processes are still running
+    - raise an exception
+  - if lockfile exists
+    - delete it
+  - start agent service
+
 ## Limitations
 
 This has been developed with Linux agents in mind. It should work on any UNIX type OS but has only been tested on RHEL 6 to date. It will need a bit of work to get working on Windows due to pathing assumptions.
