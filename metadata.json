@@ -1,6 +1,6 @@
 {
   "name": "jesse/puppet_agent_cleanser",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Jesse Reynolds",
   "summary": "Use MCollective to clean the state of your Puppet agents",
   "license": "Apache-2.0",
